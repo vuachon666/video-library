@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="คลังวิดีโอค้นหาได้จากชื่อ หัวข้อ และคำสำคัญ">
+  <title>คลังความรู้วิดีโอ</title>
+  <style>
+    :root { color-scheme: light; --ink:#18302e; --muted:#627572; --paper:#f5f7f2; --card:#fff; --line:#dfe8df; --green:#176b57; --mint:#e2f1e9; --orange:#df7547; }
+    * { box-sizing:border-box }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+    header { background:#123b35; color:white; padding:54px 22px 42px; }
+    .wrap { width:min(1060px,100% - 36px); margin:auto; }
+    .eyebrow { color:#a8d8bd; text-transform:uppercase; letter-spacing:.13em; font-size:.78rem; font-weight:700; }
+    h1 { font-size:clamp(2rem,5vw,3.4rem); line-height:1.1; margin:12px 0; }
+    header p { color:#d4e5dd; max-width:650px; margin:0; line-height:1.7; }
+    main { padding:28px 0 64px; }
+    .toolbar { display:grid; grid-template-columns:1fr auto; gap:12px; margin:8px 0 12px; }
+    .searchbox { position:relative; }
+    .searchbox span { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:1.2rem; }
+    input[type="search"] { width:100%; min-height:52px; border:1px solid var(--line); border-radius:14px; background:white; padding:12px 16px 12px 46px; font:inherit; color:var(--ink); outline:none; }
+    input[type="search"]:focus { border-color:var(--green); box-shadow:0 0 0 3px #176b5720; }
+    select { min-height:52px; border:1px solid var(--line); border-radius:14px; background:white; padding:0 38px 0 14px; font:inherit; color:var(--ink); }
+    .hint { color:var(--muted); font-size:.9rem; margin:0 0 22px; }
+    .resultsline { display:flex; justify-content:space-between; align-items:center; gap:16px; margin:26px 0 14px; }
+    h2 { font-size:1.2rem; margin:0; }
+    #count { color:var(--muted); font-size:.9rem; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .card { border:1px solid var(--line); background:var(--card); border-radius:18px; overflow:hidden; box-shadow:0 5px 18px #173c3210; }
+    .art { aspect-ratio:16/9; display:grid; place-items:center; color:#fff; font-size:2.6rem; background:linear-gradient(135deg,#236d5b,#91b891); }
+    .card:nth-child(3n+2) .art { background:linear-gradient(135deg,#b96945,#e5b37d); }
+    .card:nth-child(3n) .art { background:linear-gradient(135deg,#526e86,#9eb4bd); }
+    .body { padding:17px; }
+    .tag { display:inline-block; background:var(--mint); color:var(--green); border-radius:999px; padding:5px 10px; font-size:.76rem; font-weight:700; }
+    .body h3 { margin:11px 0 6px; font-size:1.08rem; }
+    .body p { color:var(--muted); line-height:1.55; font-size:.9rem; margin:0; min-height:44px; }
+    .keywords { margin-top:12px; color:#74837f; font-size:.8rem; }
+    button.watch { margin-top:15px; border:0; border-radius:10px; background:var(--green); color:white; padding:10px 14px; font:inherit; font-weight:700; cursor:pointer; }
+    button.watch:hover { background:#0e5141; }
+    .empty { display:none; border:1px dashed #b8c9bd; background:#fff; padding:34px; border-radius:16px; text-align:center; color:var(--muted); }
+    .notice { margin-top:26px; padding:16px 18px; background:#fff8e9; border:1px solid #f1dfb8; border-radius:14px; color:#69552e; font-size:.88rem; line-height:1.6; }
+    footer { padding:20px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }
+    dialog { width:min(900px,calc(100% - 24px)); border:0; border-radius:18px; padding:0; box-shadow:0 24px 90px #0c211f66; }
+    dialog::backdrop { background:#112522bb; }
+    .dialogtop { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; }
+    .dialogtop h2 { margin:0; }
+    .close { border:0; border-radius:50%; width:38px; height:38px; background:#eef3ef; font-size:1.2rem; cursor:pointer; }
+    .player { aspect-ratio:16/9; background:#102a26; display:grid; place-items:center; color:white; }
+    .player iframe { width:100%; height:100%; border:0; }
+    .playerhelp { max-width:520px; text-align:center; padding:26px; line-height:1.65; }
+    .playerhelp code { background:#e8eee9; color:#18302e; padding:2px 5px; border-radius:4px; }
+    @media(max-width:760px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:540px) { header { padding:38px 0 30px; } .toolbar { grid-template-columns:1fr; } select { width:100%; } .grid { grid-template-columns:1fr; } .resultsline { align-items:flex-start; flex-direction:column; gap:4px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Video knowledge library</div>
+      <h1>คลังความรู้วิดีโอ</h1>
+      <p>ค้นหาคลิปจากชื่อ หัวข้อ หรือคำสำคัญ แล้วเปิดดูได้จากหน้าเดียว</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="toolbar">
+      <label class="searchbox"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="ลองค้นหา เช่น คู่มือ, เริ่มต้น, ความรู้..." aria-label="ค้นหาวิดีโอ"></label>
+      <select id="category" aria-label="เลือกหมวดหมู่"><option value="">ทุกหมวดหมู่</option></select>
+    </div>
+    <p class="hint">ค้นหาได้จากชื่อคลิป หัวข้อ คำอธิบาย และคำสำคัญ</p>
+    <div class="resultsline"><h2>วิดีโอในคลัง</h2><span id="count" aria-live="polite"></span></div>
+    <section id="grid" class="grid" aria-label="รายการวิดีโอ"></section>
+    <div id="empty" class="empty">ไม่พบคลิปที่ตรงกับคำค้น ลองใช้คำอื่นหรือเลือกทุกหมวดหมู่</div>
+    <div class="notice"><strong>ชุดทดลอง:</strong> รายการด้านล่างเป็นข้อมูลตัวอย่าง แก้ชื่อ หมวดหมู่ คำค้น และรหัสไฟล์ Google Drive ได้ในส่วน <code>const videos</code> ของไฟล์นี้ ดูวิธีทำในไฟล์คู่มือภาษาไทย</div>
+  </main>
+  <footer><div class="wrap">คลังวิดีโอตัวอย่าง · เว็บไซต์นี้ค้นหาเฉพาะรายการที่เพิ่มไว้ในหน้านี้</div></footer>
+  <dialog id="viewer" aria-label="เครื่องเล่นวิดีโอ">
+    <div class="dialogtop"><h2 id="dialogTitle"></h2><button class="close" id="close" aria-label="ปิด">×</button></div>
+    <div id="player" class="player"></div>
+  </dialog>
+  <script>
+    // แก้ข้อมูลในรายการนี้ แล้วเพิ่มหรือลบคลิปได้ตามต้องการ
+    // driveId ใส่รหัสไฟล์ หรือวางลิงก์แชร์ Google Drive ทั้งลิงก์ก็ได้
+    const videos = [
+      { title: "เสือผอม นาบินหลา", category: "คู่มือ", description: "คลิปแนะนำขั้นตอนพื้นฐานสำหรับผู้เริ่มต้น", tags: ["เริ่มต้น", "วิธีใช้", "พื้นฐาน"], driveId: "https://drive.google.com/file/d/1xqsouVWN7bVQc0zPA5DQDLGy0J-8NRTR/view?usp=sharing" },
+      { title: "ตัวอย่าง: ความรู้เบื้องต้น", category: "ความรู้", description: "ตัวอย่างรายการความรู้สำหรับทดลองค้นหาในคลัง", tags: ["ความรู้", "พื้นฐาน", "เรียนรู้"], driveId: "" },
+      { title: "ตัวอย่าง: ขั้นตอนการทำงาน", category: "คู่มือ", description: "ตัวอย่างคลิปสาธิตขั้นตอนและการลงมือทำ", tags: ["ขั้นตอน", "สาธิต", "วิธีทำ"], driveId: "" }
+    ];
+
+    const grid = document.querySelector("#grid");
+    const search = document.querySelector("#search");
+    const category = document.querySelector("#category");
+    const empty = document.querySelector("#empty");
+    const count = document.querySelector("#count");
+    const dialog = document.querySelector("#viewer");
+    const player = document.querySelector("#player");
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+
+    [...new Set(videos.map(video => video.category).filter(Boolean))].sort().forEach(name => {
+      const option = document.createElement("option"); option.value = name; option.textContent = name; category.append(option);
+    });
+
+    function render() {
+      const term = search.value.trim().toLocaleLowerCase("th");
+      const selectedCategory = category.value;
+      const matches = videos.filter(video => {
+        const searchable = [video.title, video.category, video.description, ...(video.tags || [])].join(" ").toLocaleLowerCase("th");
+        return (!term || searchable.includes(term)) && (!selectedCategory || video.category === selectedCategory);
+      });
+      count.textContent = `พบ ${matches.length} จาก ${videos.length} คลิป`;
+      empty.style.display = matches.length ? "none" : "block";
+      grid.innerHTML = matches.map((video, index) => `
+        <article class="card">
+          <div class="art" aria-hidden="true">▶</div>
+          <div class="body">
+            <span class="tag">${escapeHtml(video.category || "ทั่วไป")}</span>
+            <h3>${escapeHtml(video.title)}</h3>
+            <p>${escapeHtml(video.description || "")}</p>
+            <div class="keywords">คำค้น: ${escapeHtml((video.tags || []).join(" · ") || "ไม่มี")}</div>
+            <button class="watch" type="button" data-index="${videos.indexOf(video)}">เปิดวิดีโอ</button>
+          </div>
+        </article>`).join("");
+      grid.querySelectorAll("button.watch").forEach(button => button.addEventListener("click", () => openVideo(videos[Number(button.dataset.index)])));
+    }
+
+    function getDriveId(value) {
+      const text = (value || "").trim();
+      const match = text.match(/\/d\/([a-zA-Z0-9_-]+)/) || text.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : text;
+    }
+    function openVideo(video) {
+      document.querySelector("#dialogTitle").textContent = video.title;
+      const id = getDriveId(video.driveId);
+      if (!id) {
+        player.innerHTML = `<div class="playerhelp"><strong>คลิปตัวอย่างยังไม่มีวิดีโอ</strong><br>เพิ่มรหัสไฟล์หรือลิงก์ Google Drive ในช่อง <code>driveId</code> ของรายการนี้ แล้วตั้งสิทธิ์ไฟล์เป็น “ทุกคนที่มีลิงก์ดูได้”</div>`;
+      } else {
+        player.innerHTML = `<iframe src="https://drive.google.com/file/d/${encodeURIComponent(id)}/preview" allow="autoplay; fullscreen" allowfullscreen title="${escapeHtml(video.title)}"></iframe>`;
+      }
+      dialog.showModal();
+    }
+    search.addEventListener("input", render);
+    category.addEventListener("change", render);
+    document.querySelector("#close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener("close", () => { player.innerHTML = ""; });
+    render();
+  </script>
+</body>
+</html>
