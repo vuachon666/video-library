@@ -3,21 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="คลังวิดีโอค้นหาได้จากชื่อ หัวข้อ และคำสำคัญ">
-  <title>คลังความรู้วิดีโอ</title>
+  <meta name="description" content="คลังวิดีโอกีฬาชนโค ค้นหาจากชื่อสนาม รายการ และคำสำคัญ">
+  <title>สนามชนโค | คลังวิดีโอ</title>
   <style>
-    :root { color-scheme: light; --ink:#18302e; --muted:#627572; --paper:#f5f7f2; --card:#fff; --line:#dfe8df; --green:#176b57; --mint:#e2f1e9; --orange:#df7547; }
+    :root { color-scheme: light; --ink:#26251f; --muted:#716b5e; --paper:#f3eddf; --card:#fffdf7; --line:#ded3bb; --green:#315747; --mint:#e7eadc; --orange:#a94c32; }
     * { box-sizing:border-box }
     body { margin:0; background:var(--paper); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
-    header { background:#123b35; color:white; padding:54px 22px 42px; }
+    header { background:radial-gradient(ellipse at 88% 20%,#a85839 0 9%,transparent 9.5%),radial-gradient(ellipse at 88% 20%,transparent 0 17%,#d6a469 17.3% 17.8%,transparent 18.1%),radial-gradient(ellipse at 88% 20%,transparent 0 27%,#536e53 27.3% 27.8%,transparent 28.1%),linear-gradient(120deg,#243b31,#172c27); color:white; padding:54px 22px 42px; }
     .wrap { width:min(1060px,100% - 36px); margin:auto; }
-    .eyebrow { color:#a8d8bd; text-transform:uppercase; letter-spacing:.13em; font-size:.78rem; font-weight:700; }
+    .eyebrow { color:#e8c28c; text-transform:uppercase; letter-spacing:.13em; font-size:.78rem; font-weight:700; }
     h1 { font-size:clamp(2rem,5vw,3.4rem); line-height:1.1; margin:12px 0; }
-    header p { color:#d4e5dd; max-width:650px; margin:0; line-height:1.7; }
+    header p { color:#e5e0d4; max-width:650px; margin:0; line-height:1.7; }
+    .brandline { display:flex; align-items:center; gap:10px; margin-bottom:17px; }
+    .brandmark { width:38px; height:38px; display:grid; place-items:center; border:1px solid #d6a469; border-radius:50%; color:#f0c68e; font-size:1.15rem; }
     main { padding:28px 0 64px; }
     .toolbar { display:grid; grid-template-columns:1fr auto; gap:12px; margin:8px 0 12px; }
     .searchbox { position:relative; }
-    .searchbox span { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:1.2rem; }
+    .searchbox span { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:1.2rem; color:var(--orange); }
     input[type="search"] { width:100%; min-height:52px; border:1px solid var(--line); border-radius:14px; background:white; padding:12px 16px 12px 46px; font:inherit; color:var(--ink); outline:none; }
     input[type="search"]:focus { border-color:var(--green); box-shadow:0 0 0 3px #176b5720; }
     select { min-height:52px; border:1px solid var(--line); border-radius:14px; background:white; padding:0 38px 0 14px; font:inherit; color:var(--ink); }
@@ -27,16 +29,16 @@
     #count { color:var(--muted); font-size:.9rem; }
     .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
     .card { border:1px solid var(--line); background:var(--card); border-radius:18px; overflow:hidden; box-shadow:0 5px 18px #173c3210; }
-    .art { aspect-ratio:16/9; display:grid; place-items:center; color:#fff; font-size:2.6rem; background:linear-gradient(135deg,#236d5b,#91b891); }
-    .card:nth-child(3n+2) .art { background:linear-gradient(135deg,#b96945,#e5b37d); }
-    .card:nth-child(3n) .art { background:linear-gradient(135deg,#526e86,#9eb4bd); }
+    .art { aspect-ratio:16/9; display:grid; place-items:center; color:#fff4dc; font-size:2.6rem; background:radial-gradient(ellipse at center,transparent 0 22%,#c89458 22.5% 23.5%,transparent 24% 36%,#8ea078 36.5% 37.5%,transparent 38% 52%,#d9bd8b 52.5% 53.5%,transparent 54%),linear-gradient(135deg,#344f40,#253b31); }
+    .card:nth-child(3n+2) .art { background:radial-gradient(ellipse at center,transparent 0 22%,#d9a36b 22.5% 23.5%,transparent 24% 36%,#9d7350 36.5% 37.5%,transparent 38% 52%,#edcf9a 52.5% 53.5%,transparent 54%),linear-gradient(135deg,#88432f,#542f27); }
+    .card:nth-child(3n) .art { background:radial-gradient(ellipse at center,transparent 0 22%,#d5bf8e 22.5% 23.5%,transparent 24% 36%,#799080 36.5% 37.5%,transparent 38% 52%,#c4b189 52.5% 53.5%,transparent 54%),linear-gradient(135deg,#536b68,#324a45); }
     .body { padding:17px; }
     .tag { display:inline-block; background:var(--mint); color:var(--green); border-radius:999px; padding:5px 10px; font-size:.76rem; font-weight:700; }
     .body h3 { margin:11px 0 6px; font-size:1.08rem; }
     .body p { color:var(--muted); line-height:1.55; font-size:.9rem; margin:0; min-height:44px; }
     .keywords { margin-top:12px; color:#74837f; font-size:.8rem; }
-    button.watch { margin-top:15px; border:0; border-radius:10px; background:var(--green); color:white; padding:10px 14px; font:inherit; font-weight:700; cursor:pointer; }
-    button.watch:hover { background:#0e5141; }
+    button.watch { margin-top:15px; border:0; border-radius:10px; background:var(--orange); color:white; padding:10px 14px; font:inherit; font-weight:700; cursor:pointer; }
+    button.watch:hover { background:#873b28; }
     .empty { display:none; border:1px dashed #b8c9bd; background:#fff; padding:34px; border-radius:16px; text-align:center; color:var(--muted); }
     .notice { margin-top:26px; padding:16px 18px; background:#fff8e9; border:1px solid #f1dfb8; border-radius:14px; color:#69552e; font-size:.88rem; line-height:1.6; }
     footer { padding:20px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }
@@ -56,23 +58,23 @@
 <body>
   <header>
     <div class="wrap">
-      <div class="eyebrow">Video knowledge library</div>
-      <h1>คลังความรู้วิดีโอ</h1>
-      <p>ค้นหาคลิปจากชื่อ หัวข้อ หรือคำสำคัญ แล้วเปิดดูได้จากหน้าเดียว</p>
+      <div class="brandline"><span class="brandmark" aria-hidden="true">♉</span><div class="eyebrow">สนามชนโค · คลังวิดีโอ</div></div>
+      <h1>เรื่องเล่าจากสนามชนโค</h1>
+      <p>พื้นที่รวบรวมการแข่งขัน ประวัติสนาม และเรื่องราวประเพณี ค้นหาคลิปจากชื่อ รายการ หรือคำสำคัญได้ในที่เดียว</p>
     </div>
   </header>
   <main class="wrap">
     <div class="toolbar">
-      <label class="searchbox"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="ลองค้นหา เช่น คู่มือ, เริ่มต้น, ความรู้..." aria-label="ค้นหาวิดีโอ"></label>
+      <label class="searchbox"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="ค้นหา เช่น ชื่อสนาม, รายการ, ประเพณี..." aria-label="ค้นหาวิดีโอ"></label>
       <select id="category" aria-label="เลือกหมวดหมู่"><option value="">ทุกหมวดหมู่</option></select>
     </div>
-    <p class="hint">ค้นหาได้จากชื่อคลิป หัวข้อ คำอธิบาย และคำสำคัญ</p>
-    <div class="resultsline"><h2>วิดีโอในคลัง</h2><span id="count" aria-live="polite"></span></div>
+    <p class="hint">ค้นหาได้จากชื่อคลิป สนามหรือรายการ คำอธิบาย และคำสำคัญ</p>
+    <div class="resultsline"><h2>คลิปในคลัง</h2><span id="count" aria-live="polite"></span></div>
     <section id="grid" class="grid" aria-label="รายการวิดีโอ"></section>
     <div id="empty" class="empty">ไม่พบคลิปที่ตรงกับคำค้น ลองใช้คำอื่นหรือเลือกทุกหมวดหมู่</div>
     <div class="notice"><strong>ชุดทดลอง:</strong> รายการด้านล่างเป็นข้อมูลตัวอย่าง แก้ชื่อ หมวดหมู่ คำค้น และรหัสไฟล์ Google Drive ได้ในส่วน <code>const videos</code> ของไฟล์นี้ ดูวิธีทำในไฟล์คู่มือภาษาไทย</div>
   </main>
-  <footer><div class="wrap">คลังวิดีโอตัวอย่าง · เว็บไซต์นี้ค้นหาเฉพาะรายการที่เพิ่มไว้ในหน้านี้</div></footer>
+  <footer><div class="wrap">สนามชนโค · คลังวิดีโอตัวอย่าง · เว็บไซต์นี้ค้นหาเฉพาะรายการที่เพิ่มไว้ในหน้านี้</div></footer>
   <dialog id="viewer" aria-label="เครื่องเล่นวิดีโอ">
     <div class="dialogtop"><h2 id="dialogTitle"></h2><button class="close" id="close" aria-label="ปิด">×</button></div>
     <div id="player" class="player"></div>
@@ -81,9 +83,9 @@
     // แก้ข้อมูลในรายการนี้ แล้วเพิ่มหรือลบคลิปได้ตามต้องการ
     // driveId ใส่รหัสไฟล์ หรือวางลิงก์แชร์ Google Drive ทั้งลิงก์ก็ได้
     const videos = [
-      { title: "เสือผอม นาบินหลา", category: "คู่มือ", description: "คลิปแนะนำขั้นตอนพื้นฐานสำหรับผู้เริ่มต้น", tags: ["เริ่มต้น", "วิธีใช้", "พื้นฐาน"], driveId: "https://drive.google.com/file/d/1xqsouVWN7bVQc0zPA5DQDLGy0J-8NRTR/view?usp=sharing" },
-      { title: "ตัวอย่าง: ความรู้เบื้องต้น", category: "ความรู้", description: "ตัวอย่างรายการความรู้สำหรับทดลองค้นหาในคลัง", tags: ["ความรู้", "พื้นฐาน", "เรียนรู้"], driveId: "" },
-      { title: "ตัวอย่าง: ขั้นตอนการทำงาน", category: "คู่มือ", description: "ตัวอย่างคลิปสาธิตขั้นตอนและการลงมือทำ", tags: ["ขั้นตอน", "สาธิต", "วิธีทำ"], driveId: "" }
+      { title: "เสือผอม นาบินหลา", category: "การแข่งขัน", description: "บันทึกภาพการแข่งขันและบรรยากาศในสนามชนโค", tags: ["สนามชนโค", "การแข่งขัน", "นาบินหลา"], driveId: "https://drive.google.com/file/d/1xqsouVWN7bVQc0zPA5DQDLGy0J-8NRTR/view?usp=sharing" },
+      { title: "ตัวอย่าง: ประวัติสนามชนโค", category: "ประวัติและประเพณี", description: "เรื่องเล่าความเป็นมาและวัฒนธรรมท้องถิ่น", tags: ["ประวัติ", "ประเพณี", "ท้องถิ่น"], driveId: "" },
+      { title: "ตัวอย่าง: รู้จักกติกาการแข่งขัน", category: "ความรู้", description: "คลิปอธิบายรูปแบบการแข่งขันและกติกา", tags: ["กติกา", "ความรู้", "การแข่งขัน"], driveId: "" }
     ];
 
     const grid = document.querySelector("#grid");
